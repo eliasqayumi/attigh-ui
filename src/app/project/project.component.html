@@ -1,0 +1,298 @@
+<!-- add new District -->
+<ng-template #create let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Köy/mahalle Ekle</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+
+      <!--type-->
+      <div class="mb-3">
+        <label [for]="FORM_NAME.TYPE">Proje türü</label>
+        <select
+          class="form-control"
+          [formControlName]="FORM_NAME.TYPE"
+          [id]="FORM_NAME.TYPE"
+        >
+          <option value="null" selected disabled>
+            Lütfen bir tür seçiniz
+          </option>
+          <option
+            *ngFor="let type of type$ | async"
+            [ngValue]="type"
+          >
+            {{type?.projectType}}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label [for]="FORM_NAME.IMPLEMENTATION_TYPE">Uygulama türü</label>
+        <select
+          class="form-control"
+          [formControlName]="FORM_NAME.IMPLEMENTATION_TYPE"
+          [id]="FORM_NAME.IMPLEMENTATION_TYPE"
+        >
+          <option value="null" selected disabled>
+            Lütfen bir uygulama tür seçiniz
+          </option>
+          <option
+            *ngFor="let type of implementationType$ | async"
+            [ngValue]="type"
+          >
+            {{type?.implementationType}}
+          </option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label [for]="FORM_NAME.PROJECT_NAME">Proje adı</label>
+        <div class="input-group">
+          <input
+            type="text"
+            [formControlName]="FORM_NAME.PROJECT_NAME"
+            [id]="FORM_NAME.PROJECT_NAME"
+            class="form-control"
+            placeholder="Proje adı"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label [for]="FORM_NAME.PROJECT_CODE">Proje kodu</label>
+        <div class="input-group">
+          <input
+            type="text"
+            [formControlName]="FORM_NAME.PROJECT_CODE"
+            [id]="FORM_NAME.PROJECT_CODE"
+            class="form-control"
+            placeholder="Proje kodu"
+            required
+          />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="submit"
+        class="btn btn-success"
+        (click)="modal.close('Save click')"
+        [disabled]="formGroup.invalid"
+      >
+        Kayıt Et
+      </button>
+    </div>
+  </form>
+</ng-template>
+<button
+  class="btn  btn-outline-success"
+  (click)="formGroup.reset();open(create)"
+>
+  Yeni köy/mahalle Ekle
+</button>
+<hr/>
+
+<!-- show all Neighbourhood -->
+<div class="show-data" *ngIf="projects$ | async as projects">
+  <ng-template #show [ngIf]="projects.length===0? error: show ">
+    <!---->
+    <mat-card class="example-card" *ngFor="let project of projects">
+      <div class="header" (click)="onSelect(project);open(details)">
+        <mat-card-header>
+          <mat-card-subtitle>Proje adı</mat-card-subtitle>
+          <mat-card-title>{{project?.projectName | titlecase }}</mat-card-title>
+          <mat-card-subtitle>Proje kodu</mat-card-subtitle>
+          <mat-card-title>{{ project?.projectCode| titlecase }}</mat-card-title>
+          <mat-card-subtitle>Proje türü</mat-card-subtitle>
+          <mat-card-title>{{ project?.type?.projectType | titlecase }}</mat-card-title>
+          <mat-card-subtitle>Uygulama türü</mat-card-subtitle>
+          <mat-card-title>{{ project?.implementationType?.implementationType | titlecase }}</mat-card-title>
+        </mat-card-header>
+      </div>
+      <mat-card-actions align="end">
+        <div class="example-button-row">
+          <button
+            mat-flat-button
+            color="warn"
+            (click)="formGroup.setValue(project);open(delete)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+          <!---->
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="formGroup.setValue(project);open(update)"
+          >
+
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </ng-template>
+</div>
+<ng-template #error>
+  <div
+    class="col-lg-12 col-md-12 col-xl-12"
+  >
+    <div class="alert alert-info" role="alert">
+      <h4 class="alert-heading">No District!</h4>
+      <p *ngIf="errorMessage === null">No District found.</p>
+      <ng-template #error>
+        <p>Error accured during retrieving {{ errorMessage }}</p>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #update let-modal>
+  <!--  <div class="modal-header">-->
+  <!--    <h4 class="modal-title">Update District</h4>-->
+  <!--    <button-->
+  <!--      type="button"-->
+  <!--      class="btn-close"-->
+  <!--      aria-label="Close"-->
+  <!--      (click)="modal.dismiss('Cross click')"-->
+  <!--    ></button>-->
+  <!--  </div>-->
+  <!--  <form [formGroup]="formGroup" (ngSubmit)="onUpdate()">-->
+  <!--    <div class="modal-body">-->
+  <!--      <div class="mb-3">-->
+  <!--        <label [for]="FORM_NAME.NEIGHBOURHOOD_NAME">Koy adi</label>-->
+  <!--        <div class="input-group">-->
+  <!--          <input-->
+  <!--            type="text"-->
+  <!--            [formControlName]="FORM_NAME.NEIGHBOURHOOD_NAME"-->
+  <!--            [id]="FORM_NAME.NEIGHBOURHOOD_NAME"-->
+  <!--            class="form-control"-->
+  <!--            placeholder="District name"-->
+  <!--          />-->
+  <!--        </div>-->
+  <!--      </div>-->
+  <!--      <div class="mb-3">-->
+  <!--        <label [for]="FORM_NAME.DISTRICT">Ilce</label>-->
+  <!--        <select-->
+  <!--          class="form-control"-->
+  <!--          [compareWith]="compareFn"-->
+  <!--          [formControlName]="FORM_NAME.DISTRICT"-->
+  <!--          [id]="FORM_NAME.DISTRICT"-->
+  <!--          required-->
+  <!--        >-->
+  <!--          <option value="null" selected disabled>-->
+  <!--            Please select continent-->
+  <!--          </option>-->
+  <!--          <option-->
+  <!--            *ngFor="let district of districts$ | async"-->
+  <!--            [ngValue]="district"-->
+  <!--          >-->
+  <!--            {{ district?.districtName }} - {{ district?.city?.cityName }}-->
+  <!--          </option>-->
+  <!--        </select>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="modal-footer">-->
+  <!--      <button-->
+  <!--        mat-flat-button-->
+  <!--        color="warn"-->
+  <!--        type="button"-->
+  <!--        (click)="modal.dismiss('Cross click')"-->
+  <!--      >-->
+  <!--        <mat-icon>close</mat-icon>-->
+  <!--      </button>-->
+  <!--      <button type="submit" mat-button color="success" (click)="modal.close('Save click')">-->
+  <!--        <mat-icon>done</mat-icon>-->
+  <!--      </button>-->
+  <!--    </div>-->
+  <!--  </form>-->
+</ng-template>
+
+
+<ng-template #delete let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Delete District</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <form [formGroup]="formGroup" (ngSubmit)="onDelete()">
+    <div class="modal-body">
+      <div class="mb-3">
+        <div class="input-group">
+          <p>
+            Are you sure! you want to delete
+            {{ formGroup.value?.districtName}}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        mat-flat-button
+        color="warn"
+        type="button"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      <button type="submit" mat-button color="success"
+              (click)="modal.close('Save click')">
+        <mat-icon>done</mat-icon>
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template class="details-container" #details let-modal>
+  <div ngbAccordion>
+    <div ngbAccordionItem [collapsed]="(selectedProjectPlannings$ | async)?.length!==0">
+      <h2 ngbAccordionHeader>
+        <button ngbAccordionButton>Planlama</button>
+      </h2>
+      <div ngbAccordionCollapse>
+        <div ngbAccordionBody>
+          <app-planning
+            [districts]="districts$ | async"
+            (planning)="onAddPlanning($event)"
+          >
+          </app-planning>
+        </div>
+      </div>
+    </div>
+    <div ngbAccordionItem
+         [collapsed]="(selectedProjectPlannings$ | async)?.length===0 && (selectedProjectEtudes$|async)?.length!==0 "
+         *ngIf="(selectedProjectPlannings$ | async)?.length!==0">
+      <h2 ngbAccordionHeader>
+        <button ngbAccordionButton>
+          Etüt Proje
+        </button>
+      </h2>
+      <div ngbAccordionCollapse>
+        <div ngbAccordionBody>
+          <app-etude (etude)="onAddEtude($event)"></app-etude>
+        </div>
+      </div>
+    </div>
+    <div ngbAccordionItem [collapsed]="(selectedProjectEtudes$ | async)?.length===0"
+         *ngIf="(selectedProjectEtudes$|async)?.length!==0">
+      <h2 ngbAccordionHeader>
+        <button ngbAccordionButton>Uygulama (inşaat)</button>
+      </h2>
+      <div ngbAccordionCollapse>
+        <div ngbAccordionBody>
+          <app-building-construction></app-building-construction>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+

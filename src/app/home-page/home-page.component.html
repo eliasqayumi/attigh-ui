@@ -1,0 +1,30 @@
+<div class="container form-control">
+  <ul ngbNav #nav="ngbNav"  class="nav-tabs"  [(activeId)]="active">
+    <li [ngbNavItem]="1">
+      <button ngbNavLink>Ana Sayfa</button>
+      <ng-template ngbNavContent>
+        <app-main-page></app-main-page>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="2">
+      <button ngbNavLink>Fiziki Durum</button>
+      <ng-template ngbNavContent>
+      <app-physical-status></app-physical-status>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="3">
+      <button ngbNavLink>Parasal İstatistik</button>
+      <ng-template ngbNavContent>
+        <app-currency-statics></app-currency-statics>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="4">
+      <button ngbNavLink>İşlemler</button>
+      <ng-template ngbNavContent>
+        <app-others></app-others>
+      </ng-template>
+    </li>
+  </ul>
+
+  <div [ngbNavOutlet]="nav" class="mt-2"></div>
+</div>

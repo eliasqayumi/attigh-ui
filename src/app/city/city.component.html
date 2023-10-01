@@ -1,0 +1,124 @@
+<div class="city-container">
+  <ng-template #insert let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Şehir Ekle</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="city">Şehir</label>
+          <div class="input-group">
+            <input
+              id="city"
+              class="form-control"
+              type="text"
+              placeholder="Şehir"
+              [formControlName]="FORM_NAME.CITY_NAME"
+            />
+          </div>
+          <label for="cityCode">Şehir Kodu</label>
+          <div class="input-group">
+            <input
+              id="cityCode"
+              class="form-control"
+              type="number"
+              placeholder="Şehir Kodu"
+              [formControlName]="FORM_NAME.CITY_CODE"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-danger" (click)="modal.close('Save click')">Kapat</button>
+          <button type="submit" class="btn btn-success" (click)="modal.close('Save click')"
+                  [disabled]="formGroup.invalid">Kayıt et
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+  <button class="btn  btn-outline-success" (click)="formGroup.reset(); open(insert)">Şehir Ekle</button>
+  <hr>
+
+  <div class="cities">
+    <div class="card" *ngFor="let city of cities$ | async">
+      <small>Şehir Adı</small>
+      <p>{{city.cityName}}</p>
+      <small>Şehir Kodu</small>
+      <p>{{city.cityCode}}</p>
+      <footer>
+        <a (click)="formGroup.setValue(city); this.open(delete)"><img src="assets/recycle-bin-svgrepo-com.svg"></a>
+        <a (click)="formGroup.setValue(city); this.open(update)"><img src="assets/pen-new-square-svgrepo-com.svg"></a>
+      </footer>
+    </div>
+  </div>
+
+
+  <ng-template #delete let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Şehir Sil</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="formGroup" (ngSubmit)="onDeleter()">
+        <label>Şehir</label>
+        {{formGroup.value?.cityName}}
+        <label>Şehir Kodu</label>
+        {{formGroup.value?.cityCode}}
+        <div class="modal-footer">
+          <button class="btn btn-danger" (click)="modal.close('Save click')">Kapat</button>
+          <button type="submit" class="btn btn-success" (click)="modal.close('Save click')"
+                  [disabled]="formGroup.invalid">Sil
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+  <ng-template #update let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Şehiri güncelle</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="formGroup" (ngSubmit)="onUpdate()">
+        <div class="mb-3">
+          <div class="input-group">
+            <input
+              id="id"
+              class="form-control"
+              type="hidden"
+              placeholder="Şehir"
+              [formControlName]="FORM_NAME.ID"
+            />
+          </div>
+          <label for="city-update">Şehir</label>
+          <div class="input-group">
+            <input
+              id="city-update"
+              class="form-control"
+              type="text"
+              placeholder="Şehir"
+              [formControlName]="FORM_NAME.CITY_NAME"
+            />
+          </div>
+          <label for="cityCode-update">Şehir Kodu</label>
+          <div class="input-group">
+            <input
+              id="cityCode-update"
+              class="form-control"
+              type="number"
+              placeholder="Şehir Kodu"
+              [formControlName]="FORM_NAME.CITY_CODE"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-danger" (click)="modal.close('Save click')">Kapat</button>
+          <button type="submit" class="btn btn-success" (click)="modal.close('Save click')"
+                  [disabled]="formGroup.invalid">Güncelle
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>

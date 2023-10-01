@@ -1,0 +1,146 @@
+<div class="cotainer " *ngIf="(selectedProjectEtudes$ | async)?.length!==0">
+  <div class="row">
+    <div class="col">
+      <h4>Koy</h4>
+    </div>
+    <div class="col">
+      <h4>Regulation area</h4>
+    </div>
+    <div class="col">
+      <h4>Number of block</h4>
+    </div>
+    <div class="col">
+      <h4>Number of business</h4>
+    </div>
+    <div class="col">
+      <h4>Cad number or parcels</h4>
+    </div>
+    <div class="col">
+      <h4>Way</h4>
+    </div>
+
+  </div>
+  <div class="row" *ngFor="let etude of selectedProjectEtudes$ | async">
+    <div class="col">
+      {{etude?.neighbourhood?.neighbourhoodName}}
+      - {{etude?.neighbourhood?.district?.districtName}}
+      - {{etude?.neighbourhood?.district?.city?.cityName}}
+    </div>
+    <div class="col">
+      <p>{{etude?.regulationArea}}</p>
+    </div>
+
+    <div class="col">
+      <p>{{etude?.numberOfBlock}}</p>
+    </div>
+    <div class="col">
+      <p>{{etude?.numberOfBusiness}}</p>
+    </div>
+    <div class="col">
+      <p>{{etude?.cadNumberOfParcels}}</p>
+    </div>
+    <div class="col">
+      <p>{{etude?.way}}</p>
+    </div>
+  </div>
+</div>
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <div class="modal-body">
+    <!--neighbourhood-->
+    <div class="mb-3">
+      <label [for]="FORM_NAME.NEIGHBOURHOOD">"Köy / mahalle</label>
+      <select
+        class="form-control"
+        [formControlName]="FORM_NAME.NEIGHBOURHOOD"
+        [id]="FORM_NAME.NEIGHBOURHOOD"
+      >
+        <option value="null" selected disabled>
+          Lütfen bir köy/mahalle seçiniz
+        </option>
+        <option
+          *ngFor="let neighbourhood of neighbourhoods$ | async"
+          [ngValue]="neighbourhood">
+          {{neighbourhood?.neighbourhoodName | titlecase}}
+          - {{neighbourhood?.district?.districtName | titlecase}}
+          - {{neighbourhood?.district?.city?.cityName | titlecase}}
+        </option>
+      </select>
+    </div>
+    <!-- regulation area-->
+    <div class="mb-3">
+      <label [for]="FORM_NAME.REGULATION_AREA">Regulation area</label>
+      <div class="input-group">
+        <input
+          type="number"
+          [formControlName]="FORM_NAME.REGULATION_AREA"
+          [id]="FORM_NAME.REGULATION_AREA"
+          class="form-control"
+          required
+        />
+      </div>
+    </div>
+    <!-- number of block-->
+    <div class="mb-3">
+      <label [for]="FORM_NAME.NUMBER_OF_BLOCK">Number of block</label>
+      <div class="input-group">
+        <input
+          type="number"
+          [formControlName]="FORM_NAME.NUMBER_OF_BLOCK"
+          [id]="FORM_NAME.NUMBER_OF_BLOCK"
+          class="form-control"
+          required
+        />
+      </div>
+    </div>
+    <!-- Number of business-->
+    <div class="mb-3">
+      <label [for]="FORM_NAME.NUMBER_OF_BUSINESS">Number of business</label>
+      <div class="input-group">
+        <input
+          type="number"
+          [formControlName]="FORM_NAME.NUMBER_OF_BUSINESS"
+          [id]="FORM_NAME.NUMBER_OF_BUSINESS"
+          class="form-control"
+          required
+        />
+      </div>
+    </div>
+    <!-- Cad number of parcels-->
+    <div class="mb-3">
+      <label [for]="FORM_NAME.CAD_NUMBER_OF_PARCELS">CAD number of parcels</label>
+      <div class="input-group">
+        <input
+          type="number"
+          [formControlName]="FORM_NAME.CAD_NUMBER_OF_PARCELS"
+          [id]="FORM_NAME.CAD_NUMBER_OF_PARCELS"
+          class="form-control"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Cad number of parcels-->
+    <div class="mb-3">
+      <label [for]="FORM_NAME.WAY">Way</label>
+      <div class="input-group">
+        <input
+          type="number"
+          [formControlName]="FORM_NAME.WAY"
+          [id]="FORM_NAME.WAY"
+          class="form-control"
+          required
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="submit"
+      class="btn btn-success"
+      [disabled]="formGroup.invalid"
+    >
+      Kayıt Et
+    </button>
+  </div>
+</form>

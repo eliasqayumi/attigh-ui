@@ -1,0 +1,64 @@
+
+<!--<div class="cotainer " *ngIf="(selectedProjectPlannings$ | async)?.length!==0">-->
+<!--  <div class="row">-->
+<!--    <div class="col">-->
+<!--      <h4>Ileceler</h4>-->
+<!--    </div>-->
+<!--    <div class="col">-->
+<!--      <h4>Alan</h4>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <div class="row" *ngFor="let planning of selectedProjectPlannings$ | async">-->
+<!--    <div class="col">-->
+<!--      {{planning?.district?.districtName}} - {{planning?.district?.city?.cityName}}-->
+<!--    </div>-->
+<!--    <div class="col">-->
+<!--      <p>{{planning?.area}}</p>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+<app-planning-list></app-planning-list>
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+  <div class="modal-body">
+    <!--type-->
+    <div class="mb-3">
+      <label [for]="FORM_NAME.DISTRICT">"İlçe</label>
+      <select
+        class="form-control"
+        [formControlName]="FORM_NAME.DISTRICT"
+        [id]="FORM_NAME.DISTRICT"
+      >
+        <option value="null" selected disabled>
+          Lütfen bir tür seçiniz
+        </option>
+        <option
+          *ngFor="let district of districts"
+          [ngValue]="district">
+          {{district?.districtName | titlecase}} - {{district?.city?.cityName | titlecase}}
+        </option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label [for]="FORM_NAME.AREA">Alan</label>
+      <div class="input-group">
+        <input
+          type="number"
+          [formControlName]="FORM_NAME.AREA"
+          [id]="FORM_NAME.AREA"
+          class="form-control"
+          required
+        />
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="submit"
+      class="btn btn-success"
+      [disabled]="formGroup.invalid"
+    >
+      Kayıt Et
+    </button>
+  </div>
+</form>

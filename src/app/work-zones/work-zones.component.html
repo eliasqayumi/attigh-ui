@@ -1,0 +1,29 @@
+<!--<p>-->
+<!--  You should use <code>class="nav-pills"</code> if you need pills and the <code>[orientation]</code> input to change nav-->
+<!--  orientation-->
+<!--</p>-->
+
+<div class="d-flex">
+  <div ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-pills flex-column" orientation="vertical">
+    <ng-container ngbNavItem="top">
+      <button ngbNavLink>Şehirler</button>
+      <ng-template ngbNavContent>
+        <app-city></app-city>
+      </ng-template>
+    </ng-container>
+    <ng-container ngbNavItem="middle">
+      <button ngbNavLink>İlçeler</button>
+      <ng-template ngbNavContent>
+        <app-district></app-district>
+      </ng-template>
+    </ng-container>
+    <ng-container ngbNavItem="bottom">
+      <button ngbNavLink>Köy / Mahalle</button>
+      <ng-template ngbNavContent>
+        <app-neighbourhood></app-neighbourhood>
+      </ng-template>
+    </ng-container>
+  </div>
+  <div [ngbNavOutlet]="nav" class="ms-4"></div>
+</div>
+
